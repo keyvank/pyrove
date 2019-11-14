@@ -2,14 +2,15 @@ from polynomial import PolynomialP
 from fieldp import FieldP
 from vector import Vector
 from r1cs import CircuitGenerator
+from qap import QAP
 from pairing import G1,G2,e
 
 def mul(pols, sol):
     return sum([pols[i] * sol[i] for i in range(len(sol))], PolynomialP([]))
 
-class QAP:
-    def __init__(self, circuit):
-        consts = len(circuit.L)
+class Pinocchio:
+    def __init__(self, qap):
+        self.qap = qap
 
          # Toxic waste
         alpha = FieldP(123)
@@ -22,14 +23,10 @@ class QAP:
             taus.append(taus[-1] * tau)
 
         self.taus = Vector(taus)
-        self.L = [PolynomialP.interpolate(l) for l in list(zip(*circuit.L))]
-        self.R = [PolynomialP.interpolate(r) for r in list(zip(*circuit.R))]
-        self.O = [PolynomialP.interpolate(o) for o in list(zip(*circuit.O))]
-        self.Z = PolynomialP.z(consts)
-        self.Ltau = Vector([p.evaluate(tau) for p in self.L])
-        self.Rtau = Vector([p.evaluate(tau) for p in self.R])
-        self.Otau = Vector([p.evaluate(tau) for p in self.O])
-        self.Ztau = self.Z.evaluate(tau)
+        self.Ltau = Vector([p.evaluate(tau) for p in self.qap.L])
+        self.Rtau = Vector([p.evaluate(tau) for p in self.qap.R])
+        self.Otau = Vector([p.evaluate(tau) for p in self.qap.O])
+        self.Ztau = self.qap.Z.evaluate(tau)
 
     def prove(self, inputs, solution):
         sol = [FieldP(0)] * len(circuit.symbols)
@@ -40,7 +37,7 @@ class QAP:
         solall = Vector(sol)
 
         # FFT
-        H = Vector(((mul(self.L, solall) * mul(self.R, solall) - mul(self.O, solall)) / self.Z).coefs)
+        H = Vector(((mul(self.qap.L, solall) * mul(self.qap.R, solall) - mul(self.qap.O, solall)) / self.qap.Z).coefs)
 
         for k, v in inputs.items():
             sol[circuit.symbols[k]] = FieldP(0)
@@ -78,6 +75,7 @@ if __name__ == '__main__':
     g.mul('(x^3+x+6)^2', 'x^3+x+6', 'x^3+x+6')
     circuit = g.compile()
     qap = QAP(circuit)
+    pino = Pinocchio(qap)
 
     inputs = {'(x^3+x+6)^2': FieldP(1296)}
 
@@ -88,5 +86,5 @@ if __name__ == '__main__':
                 'x^3+x': FieldP(30),
                 'x^3+x+6': FieldP(36)}
 
-    proof = qap.prove(inputs, solution)
-    print(qap.verify(inputs, proof))
+    proof = pino.prove(inputs, solution)
+    print(pino.verify(inputs, proof))
