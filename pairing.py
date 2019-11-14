@@ -14,6 +14,8 @@ class G1:
         ret = G1(self.value)
         ret.value *= other
         return ret
+    def __eq__(self, other):
+        return type(self) == type(other) and self.value == other.value
     def __str__(self):
         return "G1({})".format(self.value)
     def __repr__(self):
@@ -31,6 +33,8 @@ class G2:
         ret = G2(self.value)
         ret.value *= other
         return ret
+    def __eq__(self, other):
+        return type(self) == type(other) and self.value == other.value
     def __str__(self):
         return "G2({})".format(self.value)
     def __repr__(self):
@@ -48,6 +52,8 @@ class GT:
         ret = GT(self.value)
         ret.value *= other
         return ret
+    def __eq__(self, other):
+        return type(self) == type(other) and self.value == other.value
     def __str__(self):
         return "GT({})".format(self.value)
     def __repr__(self):
