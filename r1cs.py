@@ -1,8 +1,8 @@
 from vector import Vector
 from fieldp import FieldP
 
-class R1CSCircuit:
 
+class R1CSCircuit:
     def __init__(self, symbols, num_publics, L, R, O):
         self.symbols = symbols
         self.num_publics = num_publics
@@ -19,8 +19,8 @@ class R1CSCircuit:
         result = L * R - O
         return result.dot(result) == FieldP(0)
 
-class CircuitGenerator:
 
+class CircuitGenerator:
     def __init__(self):
         self.gates = []
         self.vars = set()
@@ -59,7 +59,7 @@ class CircuitGenerator:
         r = {'1': FieldP(1)}
         o = {result: FieldP(1)}
         self._new_var(result)
-        self.gates.append((l,r,o))
+        self.gates.append((l, r, o))
 
     def compile(self, inputs):
         syms = set()
@@ -69,11 +69,12 @@ class CircuitGenerator:
         if not inputs.issubset(syms):
             raise Error("Invalid inputs!")
         syms.difference_update(inputs)
-        syms = {sym: i for i,sym in enumerate(list(inputs) + list(syms))}
-        LRO = [[[FieldP(0)] * len(syms) for i in range(len(self.gates))] for i in range(3)]
+        syms = {sym: i for i, sym in enumerate(list(inputs) + list(syms))}
+        LRO = [[[FieldP(0)] * len(syms) for i in range(len(self.gates))]
+               for i in range(3)]
         for i, gate in enumerate(self.gates):
             for j in range(3):
-                for k,v in gate[j].items():
+                for k, v in gate[j].items():
                     LRO[j][i][syms[k]] = v
                 LRO[j][i] = Vector(LRO[j][i])
         return R1CSCircuit(syms, len(inputs), LRO[0], LRO[1], LRO[2])

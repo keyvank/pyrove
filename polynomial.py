@@ -1,8 +1,8 @@
 from fieldp import FieldP
 from vector import Vector
 
-class PolynomialP:
 
+class PolynomialP:
     def __init__(self, coefs):
         self.coefs = coefs if coefs else [FieldP(0)]
 
@@ -86,4 +86,6 @@ class PolynomialP:
         return sm
 
     def __str__(self):
-        return ' + '.join(["{}x^{}".format(coef, deg) for deg,coef in enumerate(self.coefs)])
+        return ' + '.join([
+            "{}x^{}".format(coef, deg) for deg, coef in enumerate(self.coefs)
+        ])

@@ -1,5 +1,6 @@
 from polynomial import PolynomialP
 
+
 class QAP:
     def __init__(self, circuit):
         self.num_publics = circuit.num_publics
