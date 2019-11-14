@@ -4,14 +4,14 @@ from fieldp import FieldP
 
 class G1:
     GENERATOR = FieldP(2)
-    def __init__(self):
-        self.value = G1.GENERATOR
+    def __init__(self, val = None):
+        self.value = val if val else G1.GENERATOR
     def __add__(self, other):
-        ret = G1()
+        ret = G1(self.value)
         ret.value += other.value
         return ret
     def __mul__(self, other):
-        ret = G1()
+        ret = G1(self.value)
         ret.value *= other
         return ret
     def __str__(self):
@@ -21,14 +21,14 @@ class G1:
 
 class G2:
     GENERATOR = FieldP(3)
-    def __init__(self):
-        self.value = G2.GENERATOR
+    def __init__(self, val = None):
+        self.value = val if val else G2.GENERATOR
     def __add__(self, other):
-        ret = G2()
+        ret = G2(self.value)
         ret.value += other.value
         return ret
     def __mul__(self, other):
-        ret = G2()
+        ret = G2(self.value)
         ret.value *= other
         return ret
     def __str__(self):
@@ -38,14 +38,14 @@ class G2:
 
 class GT:
     GENERATOR = FieldP(5)
-    def __init__(self):
-        self.value = GT.GENERATOR
+    def __init__(self, val = None):
+        self.value = val if val else GT.GENERATOR
     def __add__(self, other):
-        ret = GT()
+        ret = GT(self.value)
         ret.value += other.value
         return ret
     def __mul__(self, other):
-        ret = GT()
+        ret = GT(self.value)
         ret.value *= other
         return ret
     def __str__(self):
