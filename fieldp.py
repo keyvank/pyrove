@@ -1,9 +1,6 @@
 class FieldP:
     P = 0x73eda753299d7d483339d80809a1d80553bda402fffe5bfeffffffff00000001
 
-    def zero():
-        return FieldP(0)
-
     def __init__(self, value):
         self.value = value % FieldP.P
 

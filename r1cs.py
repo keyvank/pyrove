@@ -67,7 +67,7 @@ class CircuitGenerator:
             for part in gate:
                 syms.update(part.keys())
         if not inputs.issubset(syms):
-            raise Error("Invalid inputs!")
+            raise Exception("Invalid inputs!")
         syms.difference_update(inputs)
         syms = {sym: i for i, sym in enumerate(list(inputs) + list(syms))}
         LRO = [[[FieldP(0)] * len(syms) for i in range(len(self.gates))]

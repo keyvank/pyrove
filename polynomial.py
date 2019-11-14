@@ -42,7 +42,7 @@ class PolynomialP:
             return PolynomialP(num).normalized()
         quot = []
         divisor = den[-1]
-        for i in range(shiftlen + 1):
+        for _ in range(shiftlen + 1):
             mult = num[-1] / divisor
             quot = [mult] + quot
             if mult != FieldP(0):
@@ -58,12 +58,14 @@ class PolynomialP:
             coefs.pop()
         return PolynomialP(coefs)
 
+    @staticmethod
     def z(length):
         p = PolynomialP([FieldP(1)])
         for i in range(1, length + 1):
             p *= PolynomialP([FieldP(-i), FieldP(1)])
         return p
 
+    @staticmethod
     def singleton(at, height, length):
         p = PolynomialP([FieldP(1)])
         for i in range(1, length + 1):
@@ -72,6 +74,7 @@ class PolynomialP:
         p *= height / p.evaluate(FieldP(at))
         return p
 
+    @staticmethod
     def interpolate(vals):
         p = PolynomialP([FieldP(0)])
         l = len(vals)
