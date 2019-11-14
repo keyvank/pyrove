@@ -21,8 +21,9 @@ class Vector:
             return Vector(tuple(val * v for val in self.vals))
 
     def dot(self, v):
+        from pairing import G1
         from fieldp import FieldP
-        return sum(tuple(v1 * v2 for v1, v2 in zip(self.vals, v.vals)), FieldP(0))
+        return sum(tuple(v1 * v2 for v1, v2 in zip(self.vals, v.vals)), G1(FieldP(0)))
 
     def __getitem__(self, index):
         return self.vals[index]
