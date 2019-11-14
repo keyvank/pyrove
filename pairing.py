@@ -8,7 +8,7 @@ class G1:
         self.value = G1.GENERATOR
     def __add__(self, other):
         ret = G1()
-        ret.value += other
+        ret.value += other.value
         return ret
     def __mul__(self, other):
         ret = G1()
@@ -25,7 +25,7 @@ class G2:
         self.value = G2.GENERATOR
     def __add__(self, other):
         ret = G2()
-        ret.value += other
+        ret.value += other.value
         return ret
     def __mul__(self, other):
         ret = G2()
@@ -42,7 +42,7 @@ class GT:
         self.value = GT.GENERATOR
     def __add__(self, other):
         ret = GT()
-        ret.value += other
+        ret.value += other.value
         return ret
     def __mul__(self, other):
         ret = GT()
