@@ -73,7 +73,7 @@ if __name__ == '__main__':
     g.add('x^3+x', 'x^3', 'x')
     g.add('x^3+x+6', 'x^3+x', FieldP(6))
     g.mul('(x^3+x+6)^2', 'x^3+x+6', 'x^3+x+6')
-    circuit = g.compile()
+    circuit = g.compile({'1', '(x^3+x+6)^2'})
     qap = QAP(circuit)
     pino = Pinocchio(qap)
 

@@ -3,8 +3,9 @@ from fieldp import FieldP
 
 class R1CSCircuit:
 
-    def __init__(self, symbols, L, R, O):
+    def __init__(self, symbols, num_publics, L, R, O):
         self.symbols = symbols
+        self.num_publics = num_publics
         self.L, self.R, self.O = L, R, O
 
     def verify(self, solution):
@@ -60,16 +61,19 @@ class CircuitGenerator:
         self._new_var(result)
         self.gates.append((l,r,o))
 
-    def compile(self):
+    def compile(self, inputs):
         syms = set()
         for gate in self.gates:
             for part in gate:
                 syms.update(part.keys())
-        syms = {sym: i for i,sym in enumerate(list(syms))}
+        if not inputs.issubset(syms):
+            raise Error("Invalid inputs!")
+        syms.difference_update(inputs)
+        syms = {sym: i for i,sym in enumerate(list(inputs) + list(syms))}
         LRO = [[[FieldP(0)] * len(syms) for i in range(len(self.gates))] for i in range(3)]
         for i, gate in enumerate(self.gates):
             for j in range(3):
                 for k,v in gate[j].items():
                     LRO[j][i][syms[k]] = v
                 LRO[j][i] = Vector(LRO[j][i])
-        return R1CSCircuit(syms, LRO[0], LRO[1], LRO[2])
+        return R1CSCircuit(syms, len(inputs), LRO[0], LRO[1], LRO[2])
