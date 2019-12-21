@@ -5,6 +5,8 @@ from r1cs import CircuitGenerator
 from qap import QAP
 from pairing import G1, G2, e
 from gadgets.gadget import Gadget, Mul, Add
+from gadgets.mimc import MiMC
+from gadgets.merkle import MerkleTree
 
 def mul(pols, sol):
     return sum([pols[i] * sol[i] for i in range(len(sol))], PolynomialP([]))
@@ -160,15 +162,13 @@ class Pinocchio:
 if __name__ == '__main__':
     c = CircuitGenerator()
 
-    x = c.create_var()
-    x2 = Mul(c, x, x).output()
-    x3 = Mul(c, x2, x).output()
-    x3_x = Add(c, x3, x).output()
-    x3_x_6 = Add(c, x3_x, c.create_var(FieldP(6))).output()
-    x3_x_6__2 = Mul(c, x3_x_6, x3_x_6).output()
-    c.create_input(x3_x_6__2, '(x^3+x+6)^2')
-    x.assign(FieldP(3))
-
+    leaves = [c.create_var() for _ in range(4)]
+    root = MerkleTree(c, leaves).output()g
+    leaves[0].assign(FieldP(4))
+    leaves[1].assign(FieldP(9))
+    leaves[2].assign(FieldP(2))
+    leaves[3].assign(FieldP(23))
+    
     r1cs = c.compile()
     qap = QAP(r1cs)
     pino = Pinocchio(qap)
