@@ -163,15 +163,24 @@ if __name__ == '__main__':
     c = CircuitGenerator()
 
     leaves = [c.create_var() for _ in range(4)]
-    root = MerkleTree(c, leaves).output()g
+    root = MerkleTree(c, leaves).output()
     leaves[0].assign(FieldP(4))
     leaves[1].assign(FieldP(9))
     leaves[2].assign(FieldP(2))
     leaves[3].assign(FieldP(23))
-    
-    r1cs = c.compile()
-    qap = QAP(r1cs)
-    pino = Pinocchio(qap)
 
+    print("Converting the problem to R1CS form...")
+    r1cs = c.compile()
+    print("Done! Variables: {} Constraints: {}".format(len(r1cs.L), len(r1cs.L[0])))
+    print("Converting the problem to QAP form...")
+    qap = QAP(r1cs)
+    print("Done!")
+    print("Generating the Pinocchio parameters...")
+    pino = Pinocchio(qap)
+    print("Done!")
+
+    print("Proving the circuit...")
     proof = pino.prove(c.sol())
-    print(pino.verify(c.inp(), proof))
+    print("Done!")
+
+    print("Proof validity: {}".format(pino.verify(c.inp(), proof)))
